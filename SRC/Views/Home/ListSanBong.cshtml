@@ -1,4 +1,4 @@
-﻿@{
+@{
     Layout = "~/Views/Shared/LayoutSanbong.cshtml";
     //var colorClasses = new[] { "bg-gradient-primary", "bg-gradient-success", "bg-gradient-dark", "bg-gradient-danger" };
     var index = 0;
@@ -46,7 +46,7 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var message = '@ViewBag.Message';
+        var message = '@Html.Raw(TempData["Message"])';
         if (message && message !== "") {
             alert(message);
         }

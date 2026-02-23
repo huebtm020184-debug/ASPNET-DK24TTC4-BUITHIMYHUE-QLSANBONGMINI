@@ -80,12 +80,12 @@
                             </div>
                         </a>
                     </li>
-                    @*<li class="nav-item d-flex align-items-center">
-                        <a asp-controller="Cart" asp-action="Cart" class="nav-link text-body font-weight-bold px-0 cart-icon me-sm-4" asp-route-userId="@ViewBag.userId">
+                    <li class="nav-item d-flex align-items-center">
+                        <a asp-controller="Cart" asp-action="Cart" class="nav-link text-body font-weight-bold px-0 cart-icon me-sm-4">
                             <i class="fas fa-shopping-cart"></i>
-                            <span class="cart-count">@Model.Item1.Count().ToString()</span>
+                            <span class="cart-count">@ViewBag.Quantity</span>
                         </a>
-                    </li>*@
+                    </li>
                     <li class="nav-item d-flex align-items-center">
                         <a href="../pages/sign-in.html" class="nav-link text-body font-weight-bold px-0">
                             <i class="fa fa-user me-sm-1"></i>
@@ -192,14 +192,17 @@
 
     @*xóa items*@
     <script>
-        $('.delete-item').click(function (e) {
-            var itemId = $(this).attr('id'); // Lấy ID từ thuộc tính dữ liệu
+        $(document).on('click', '.delete-item', function (e) {
+            var itemId = $(this).attr('id');
                 
             $.ajax({
-                url: "CartChange", // Địa chỉ URL của action xử lý xóa
-                data: { cartDetailId: itemId }, // Truyền ID của mục cần xóa
+                url: "CartChange",
+                data: { cartDetailId: itemId },
                 success: function (response) {
                     $("div#content").html(response);
+                    // Cập nhật số lượng giỏ hàng trên badge
+                    var count = $("div#content").find('.delete-item').length;
+                    $('.cart-count').text(count);
                 }                
             });
         });

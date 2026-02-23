@@ -88,6 +88,11 @@
         document.addEventListener("DOMContentLoaded", function () {
             var currentDate = new Date().toISOString().split("T")[0];
             document.getElementById("datepicker").value = currentDate;
+
+            var message = '@Html.Raw(TempData["Message"])';
+            if (message && message !== "") {
+                alert(message);
+            }
         });
 
         // Xử lí khi thay đổi ngày

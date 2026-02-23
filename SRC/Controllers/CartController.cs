@@ -21,12 +21,24 @@ namespace QuanLySanBong.Controllers
         }
         public IActionResult Cart()
         {
+            if (ConstVar.User?.UserId == null || ConstVar.User.UserId == 0)
+                return RedirectToAction("Login", "Access");
+
             ViewBag.Title = "Giỏ hàng";            
             var user = db.User.FirstOrDefault(u => u.UserId == ConstVar.User.UserId);
             if (user != null)
             {
                 ViewBag.Name = user.DisplayName;
                 ViewBag.userId = user.UserId;
+                try
+                {
+                    ViewBag.Quantity = db.Cart.Include(p => p.CartDetails).
+                   FirstOrDefault(p => p.UserId == Classes.ConstVar.User.UserId).CartDetails.Count();
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Quantity = 0;
+                }
             }
             var cartDetails = db.Cart.Include(p => p.CartDetails)
                          .ThenInclude(cd => cd.YardDetail)

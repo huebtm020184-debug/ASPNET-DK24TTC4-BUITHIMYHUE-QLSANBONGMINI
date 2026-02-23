@@ -239,8 +239,14 @@ namespace QuanLySanBong.Controllers
         }
         public IActionResult CheckSan(string subYardId, string timeSlotId, string playGroundId, string dateBook)
         {
+            var cart = db.Cart.FirstOrDefault(p => p.UserId == Classes.ConstVar.User.UserId);
+            if (ConstVar.User?.UserId == null || cart == null)
+            {
+                //TempData["Message"] = "Vui lòng đăng nhập trước khi đặt sân!";
+                return RedirectToAction("Login", "Access");
+            }
+
             var timeslot = db.TimeSlot.FirstOrDefault(p => p.TimeSlotId == int.Parse(timeSlotId));
-            var timeEnd = timeslot.TimeEnd.ToString();
             var playGroundid = int.Parse(playGroundId);
 
             var yardDetail = db.YardDetail
@@ -248,15 +254,14 @@ namespace QuanLySanBong.Controllers
                                                      && p.SubYardId == int.Parse(subYardId)
                                                      && p.TimeSlotId == int.Parse(timeSlotId));
 
-            if (string.Compare(dateBook, DateTime.Now.ToString("yyyy-MM-dd")) == 0 && string.Compare(timeEnd, DateTime.Now.ToShortTimeString()) < 0)
+            if (dateBook == DateTime.Now.ToString("yyyy-MM-dd") && timeslot.TimeEnd < DateTime.Now.TimeOfDay)
             {
-                ViewBag.TimeEnd = timeEnd;
-                ViewBag.Message = "Đã quá giờ nên không thể đặt sân!";
-                return RedirectToAction("ListSanBong", "Home");
+                TempData["Message"] = "Đã quá giờ nên không thể đặt sân!";
+                return RedirectToAction("DatSan", "Home", new { mid = playGroundId, dateBook });
             }
             var cartDetail = new CartDetail
             {
-                Cart = db.Cart.FirstOrDefault(p => p.UserId == Classes.ConstVar.User.UserId),
+                Cart = cart,
                 YardDetail = yardDetail,
                 DateBook = DateTime.Parse(dateBook),
                 Price = yardDetail.Price,
