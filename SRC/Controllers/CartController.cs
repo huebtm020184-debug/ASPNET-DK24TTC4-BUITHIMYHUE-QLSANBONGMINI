@@ -26,6 +26,7 @@ namespace QuanLySanBong.Controllers
 
             ViewBag.Title = "Giỏ hàng";            
             var user = db.User.FirstOrDefault(u => u.UserId == ConstVar.User.UserId);
+            ViewBag.CurrentUser = user;
             if (user != null)
             {
                 ViewBag.Name = user.DisplayName;
@@ -64,6 +65,7 @@ namespace QuanLySanBong.Controllers
 
         public IActionResult CartChange(int cartDetailId)
         {
+            ViewBag.CurrentUser = ConstVar.User;
             var MyModelView = ListItemAfterDelete(ConstVar.User.UserId, cartDetailId);            
             return PartialView("BangCart", MyModelView);
         }
@@ -71,6 +73,7 @@ namespace QuanLySanBong.Controllers
         public Tuple<List<CartDetail>, User> ListItemAfterDelete(int userId, int cartDetailId)
         {
             var user = db.User.FirstOrDefault(u => u.UserId == userId);
+            ViewBag.CurrentUser = user;
             if (user != null)
             {
                 ViewBag.Name = user.DisplayName;
@@ -140,6 +143,7 @@ namespace QuanLySanBong.Controllers
             }
             invoice.Total = TongTien;
             db.SaveChanges();
+            ViewBag.CurrentUser = ConstVar.User;
             return RedirectToAction("HoaDon", "Home", new { invoideId = invoice.InvoiceId });
         }       
     }

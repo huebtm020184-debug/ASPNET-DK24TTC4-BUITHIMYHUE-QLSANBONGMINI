@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using QuanLySanBong.Classes;
+using QuanLySanBong.Data;
+using QuanLySanBong.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using QuanLySanBong.Data;
-using QuanLySanBong.Models;
 
 namespace QuanLySanBong.Controllers
 {
@@ -22,6 +23,7 @@ namespace QuanLySanBong.Controllers
         // GET: YardDetails
         public async Task<IActionResult> Index()
         {
+            ViewBag.CurrentUser = ConstVar.User;
             var footballContext = _context.YardDetail.Include(y => y.PlayGround).Include(y => y.SubYard).Include(y => y.TimeSlot);
             return View(await footballContext.ToListAsync());
         }
@@ -29,6 +31,7 @@ namespace QuanLySanBong.Controllers
         // GET: YardDetails/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.CurrentUser = ConstVar.User;
             if (id == null || _context.YardDetail == null)
             {
                 return NotFound();
@@ -50,6 +53,7 @@ namespace QuanLySanBong.Controllers
         // GET: YardDetails/Create
         public IActionResult Create()
         {
+            ViewBag.CurrentUser = ConstVar.User;
             ViewData["PlayGroundId"] = new SelectList(_context.PlayGround, "PlayGroundId", "PlayGroundId");
             ViewData["SubYardId"] = new SelectList(_context.SubYard, "SubYardId", "SubYardId");
             ViewData["TimeSlotId"] = new SelectList(_context.TimeSlot, "TimeSlotId", "TimeSlotId");
@@ -63,6 +67,7 @@ namespace QuanLySanBong.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("YardDetailId,PlayGroundId,SubYardId,TimeSlotId,Price")] YardDetail yardDetail)
         {
+            ViewBag.CurrentUser = ConstVar.User;
             if (ModelState.IsValid)
             {
                 _context.Add(yardDetail);
@@ -78,6 +83,7 @@ namespace QuanLySanBong.Controllers
         // GET: YardDetails/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.CurrentUser = ConstVar.User;
             if (id == null || _context.YardDetail == null)
             {
                 return NotFound();
@@ -101,6 +107,7 @@ namespace QuanLySanBong.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("YardDetailId,PlayGroundId,SubYardId,TimeSlotId,Price")] YardDetail yardDetail)
         {
+            ViewBag.CurrentUser = ConstVar.User;
             if (id != yardDetail.YardDetailId)
             {
                 return NotFound();
@@ -135,6 +142,7 @@ namespace QuanLySanBong.Controllers
         // GET: YardDetails/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.CurrentUser = ConstVar.User;
             if (id == null || _context.YardDetail == null)
             {
                 return NotFound();
@@ -158,6 +166,7 @@ namespace QuanLySanBong.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.CurrentUser = ConstVar.User;
             if (_context.YardDetail == null)
             {
                 return Problem("Entity set 'FootballContext.YardDetail'  is null.");
@@ -174,7 +183,8 @@ namespace QuanLySanBong.Controllers
 
         private bool YardDetailExists(int id)
         {
-          return (_context.YardDetail?.Any(e => e.YardDetailId == id)).GetValueOrDefault();
+            ViewBag.CurrentUser = ConstVar.User;
+            return (_context.YardDetail?.Any(e => e.YardDetailId == id)).GetValueOrDefault();
         }
     }
 }

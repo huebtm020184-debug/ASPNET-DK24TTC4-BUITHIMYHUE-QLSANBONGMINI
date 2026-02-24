@@ -49,6 +49,7 @@ namespace QuanLySanBong.Controllers
                     .OrderBy(p => p.PlayGroundName);
                 PagedList<PlayGround> lst = new PagedList<PlayGround>(playgrounds, pageNum, pageSize);
                 var MyModelView = new Tuple<IPagedList<PlayGround>, User>(lst, user);
+                ViewBag.CurrentUser = user;
                 return View(MyModelView);
             }
             return View();
@@ -84,6 +85,7 @@ namespace QuanLySanBong.Controllers
                     .OrderBy(p => p.PlayGroundName);
                 PagedList<PlayGround> lst = new PagedList<PlayGround>(playgrounds, pageNum, pageSize);
                 var MyModelView = new Tuple<IPagedList<PlayGround>, User>(lst, user);
+                ViewBag.CurrentUser = user;
                 return View(MyModelView);
             }
             return View();
@@ -94,6 +96,7 @@ namespace QuanLySanBong.Controllers
             ViewBag.Title = "Sân bóng đã đặt";
             ViewBag.active = 2;
             var user = db.User.FirstOrDefault(u => u.UserId == ConstVar.User.UserId);
+            ViewBag.CurrentUser = user;
             if (user != null)
             {
                 ViewBag.Name = user.DisplayName;
@@ -152,6 +155,7 @@ namespace QuanLySanBong.Controllers
             ViewBag.Title = "Hóa đơn đặt sân";
             ViewBag.active = 3;
             var user = db.User.FirstOrDefault(u => u.UserId == ConstVar.User.UserId);
+            ViewBag.CurrentUser = user;
             if (user != null)
             {
                 ViewBag.Name = user.DisplayName;
@@ -197,6 +201,7 @@ namespace QuanLySanBong.Controllers
             ViewBag.Title = "Hóa đơn đặt sân";
             ViewBag.active = 3;
             var user = db.User.FirstOrDefault(u => u.UserId == ConstVar.User.UserId);
+            ViewBag.CurrentUser = user;
             if (user != null)
             {
                 ViewBag.Name = user.DisplayName;
@@ -218,6 +223,7 @@ namespace QuanLySanBong.Controllers
             ViewBag.Title = "Đặt sân bóng";
             ViewBag.active = 1;
             var user = db.User.FirstOrDefault(u => u.UserId == ConstVar.User.UserId);
+            ViewBag.CurrentUser = user;
             if (user != null)
             {
                 ViewBag.Name = user.DisplayName;
@@ -240,6 +246,7 @@ namespace QuanLySanBong.Controllers
         public IActionResult CheckSan(string subYardId, string timeSlotId, string playGroundId, string dateBook)
         {
             var cart = db.Cart.FirstOrDefault(p => p.UserId == Classes.ConstVar.User.UserId);
+            ViewBag.CurrentUser = ConstVar.User;
             if (ConstVar.User?.UserId == null || cart == null)
             {
                 //TempData["Message"] = "Vui lòng đăng nhập trước khi đặt sân!";
@@ -275,6 +282,7 @@ namespace QuanLySanBong.Controllers
         {
             var MyModelView = SelectList(datebook, mid);
             ViewBag.PlayGroundId = mid;
+            ViewBag.CurrentUser = ConstVar.User;
             return PartialView("BangLichSan", MyModelView);
         }
         public Tuple<List<TimeSlot>, List<SubYard>, List<YardDetail>, List<YardDetail>> SelectList(string datebook, int mid)
@@ -297,6 +305,7 @@ namespace QuanLySanBong.Controllers
             var SubYards = (from YardDetail in YardDetails
                             join SubYard in db.SubYard on YardDetail.SubYardId equals SubYard.SubYardId
                             select SubYard).Distinct();
+            ViewBag.CurrentUser = ConstVar.User;
             return new Tuple<List<TimeSlot>, List<SubYard>, List<YardDetail>, List<YardDetail>>(
                     TimeSlots.ToList(),
                     SubYards.ToList(),

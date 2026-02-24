@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using QuanLySanBong.Classes;
+using QuanLySanBong.Data;
+using QuanLySanBong.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using QuanLySanBong.Data;
-using QuanLySanBong.Models;
 
 namespace QuanLySanBong.Controllers
 {
@@ -22,6 +23,7 @@ namespace QuanLySanBong.Controllers
         // GET: InvoiceDetails
         public async Task<IActionResult> Index()
         {
+            ViewBag.CurrentUser = ConstVar.User;
             var footballContext = _context.InvoiceDetail.Include(i => i.Invoice).Include(i => i.YardDetail);
             return View(await footballContext.ToListAsync());
         }
@@ -29,6 +31,7 @@ namespace QuanLySanBong.Controllers
         // GET: InvoiceDetails/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.CurrentUser = ConstVar.User;
             if (id == null || _context.InvoiceDetail == null)
             {
                 return NotFound();
@@ -49,6 +52,7 @@ namespace QuanLySanBong.Controllers
         // GET: InvoiceDetails/Create
         public IActionResult Create()
         {
+            ViewBag.CurrentUser = ConstVar.User;
             ViewData["InvoiceId"] = new SelectList(_context.Invoice, "InvoiceId", "InvoiceId");
             ViewData["YardDetailId"] = new SelectList(_context.YardDetail, "YardDetailId", "YardDetailId");
             return View();
@@ -61,6 +65,7 @@ namespace QuanLySanBong.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("InvoiceDetailId,InvoiceId,YardDetailId,DateBook,Price")] InvoiceDetail invoiceDetail)
         {
+            ViewBag.CurrentUser = ConstVar.User;
             if (ModelState.IsValid)
             {
                 _context.Add(invoiceDetail);
@@ -75,6 +80,7 @@ namespace QuanLySanBong.Controllers
         // GET: InvoiceDetails/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.CurrentUser = ConstVar.User;
             if (id == null || _context.InvoiceDetail == null)
             {
                 return NotFound();
@@ -97,6 +103,7 @@ namespace QuanLySanBong.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("InvoiceDetailId,InvoiceId,YardDetailId,DateBook,Price")] InvoiceDetail invoiceDetail)
         {
+            ViewBag.CurrentUser = ConstVar.User;
             if (id != invoiceDetail.InvoiceDetailId)
             {
                 return NotFound();
@@ -130,6 +137,7 @@ namespace QuanLySanBong.Controllers
         // GET: InvoiceDetails/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.CurrentUser = ConstVar.User;
             if (id == null || _context.InvoiceDetail == null)
             {
                 return NotFound();
@@ -152,6 +160,7 @@ namespace QuanLySanBong.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.CurrentUser = ConstVar.User;
             if (_context.InvoiceDetail == null)
             {
                 return Problem("Entity set 'FootballContext.InvoiceDetail'  is null.");

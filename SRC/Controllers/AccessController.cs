@@ -19,6 +19,7 @@ namespace QuanLySanBong.Controllers
         public ActionResult Login()
         {
             ConstVar.User = new Models.User();
+            ViewBag.CurrentUser = ConstVar.User;
             return View();           
         }
 
@@ -27,6 +28,7 @@ namespace QuanLySanBong.Controllers
         {
             ConstVar.User = new Models.User(); ;
             User user = db.User.FirstOrDefault(u => u.Username == username && u.Password == password);
+            ViewBag.CurrentUser = user;
             if (user != null)
             {
                 ConstVar.User = user;
@@ -39,6 +41,7 @@ namespace QuanLySanBong.Controllers
         [HttpGet]
         public IActionResult Register(User? user)
         {
+            ViewBag.CurrentUser = new User();
             return View(user);
         }
 
@@ -61,6 +64,7 @@ namespace QuanLySanBong.Controllers
             cart.Total = 0;
             db.Cart.Add(cart);
             db.SaveChanges();
+            ViewBag.CurrentUser = user;
             return RedirectToAction("Login");
         }
 

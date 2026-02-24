@@ -23,6 +23,7 @@ namespace QuanLySanBong.Controllers
             }
 
             var user = _context.User.FirstOrDefault(u => u.UserId == Classes.ConstVar.User.UserId);
+            ViewBag.CurrentUser = user;
             if (user != null)
             {
                 ViewBag.Name = user.DisplayName;
